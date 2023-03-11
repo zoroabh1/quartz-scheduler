@@ -2,7 +2,7 @@
 {
 	public static class Common
 	{
-		public static void Logs(string message, string fileName)
+		public static void JobLogs(string message, string fileName)
 		{
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot","MyLogs");
 			if(!Directory.Exists(path))

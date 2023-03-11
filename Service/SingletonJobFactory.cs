@@ -15,7 +15,7 @@ namespace WebConsoleApplication.Service
 		
 		public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
 		{
-			Common.Logs($"NewJob At " + DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss"), "NewJob" + DateTime.Now.ToString("hhmmss")); 
+			//Common.Logs($"NewJob At " + DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss"), "NewJob" + DateTime.Now.ToString("hhmmss")); 
 			return _serviceProvider.GetRequiredService(bundle.JobDetail.JobType) as IJob;
 		}
 

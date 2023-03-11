@@ -11,7 +11,7 @@ namespace WebConsoleApplication.Service
 		}
 		public Task Execute(IJobExecutionContext context)
 		{
-			Common.Logs($"JobReminder At " + DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss"), "JobReminder" + DateTime.Now.ToString("hhmmss"));
+			//Common.JobLogs($"JobReminder At " + DateTime.Now.ToString("dd-MM-yyyy hh:mm:ss"), "JobReminder" + DateTime.Now.ToString("hhmmss"));
 			return Task.CompletedTask;
 		}
 	}

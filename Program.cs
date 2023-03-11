@@ -1,6 +1,8 @@
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
+using Quartz.Spi.CosmosDbJobStore;
+using System.Collections.Specialized;
 using System.Linq.Expressions;
 using WebConsoleApplication.Models;
 using WebConsoleApplication.Service;
@@ -17,9 +19,34 @@ namespace WebConsoleApplication
 			builder.Services.AddControllersWithViews();
 			builder.Services.AddHostedService<QuartzHostedService>();
 			builder.Services.AddSingleton<IJobFactory, Service.SingletonJobFactory>();
-			builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+			//builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 			builder.Services.AddSingleton<JobReminder>();
 			builder.Services.AddSingleton(new Job(type : typeof(JobReminder),expression:"0/5 0/1 * 1/1 * ? *")); //Every 30 sec
+
+			var properties = new NameValueCollection();
+			//{
+			//	{ "quartz.scheduler.idleWaitTime", "1000" }
+			//};
+
+			properties[StdSchedulerFactory.PropertySchedulerInstanceName] = "type";
+			properties[StdSchedulerFactory.PropertySchedulerInstanceId] = $"{Environment.MachineName}-{Guid.NewGuid()}";
+			properties[StdSchedulerFactory.PropertyJobStoreType] = typeof(CosmosDbJobStore).AssemblyQualifiedName;
+			properties[$"{StdSchedulerFactory.PropertyObjectSerializer}.type"] = "json";
+			properties[$"{StdSchedulerFactory.PropertyJobStorePrefix}.Endpoint"] = "https://hack-undefined.documents.azure.com:443/";
+			properties[$"{StdSchedulerFactory.PropertyJobStorePrefix}.Key"] = "PzTBxFlcsf6yiapPYRaq8FNowWztuoGJN6p7oVLoDjPuUP2fuBsbXzQDHjrntHhPDN1qofa39ojEACDbKdVgvQ==";
+			properties[$"{StdSchedulerFactory.PropertyJobStorePrefix}.DatabaseId"] = "ToDoList";
+			properties[$"{StdSchedulerFactory.PropertyJobStorePrefix}.CollectionId"] = "quartz";
+			properties[$"{StdSchedulerFactory.PropertyJobStorePrefix}.Clustered"] = "true";
+			properties[StdSchedulerFactory.PropertySchedulerIdleWaitTime] = "1000";
+
+			//var scheduler = new StdSchedulerFactory(properties);
+			//return scheduler.GetScheduler();
+
+			var schedulerFactory = new StdSchedulerFactory(properties);
+			var scheduler = schedulerFactory.GetScheduler().Result;
+			//scheduler.Start().Wait();
+
+			builder.Services.AddSingleton(scheduler);
 
 			var app = builder.Build();
 
