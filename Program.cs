@@ -47,6 +47,7 @@ namespace WebConsoleApplication
 			var scheduler = schedulerFactory.GetScheduler().Result;
 
 			scheduler.ListenerManager.AddTriggerListener(new TriggerListener(), GroupMatcher<TriggerKey>.AnyGroup());
+			scheduler.ListenerManager.AddSchedulerListener(new ScheduleListener());
 			//scheduler.Start().Wait();
 
 			builder.Services.AddSingleton(scheduler);
