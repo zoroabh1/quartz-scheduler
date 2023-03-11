@@ -1,5 +1,6 @@
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Matchers;
 using Quartz.Spi;
 using Quartz.Spi.CosmosDbJobStore;
 using System.Collections.Specialized;
@@ -44,6 +45,8 @@ namespace WebConsoleApplication
 
 			var schedulerFactory = new StdSchedulerFactory(properties);
 			var scheduler = schedulerFactory.GetScheduler().Result;
+
+			scheduler.ListenerManager.AddTriggerListener(new TriggerListener(), GroupMatcher<TriggerKey>.AnyGroup());
 			//scheduler.Start().Wait();
 
 			builder.Services.AddSingleton(scheduler);
