@@ -23,6 +23,7 @@ namespace WebConsoleApplication
 			//builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 			builder.Services.AddSingleton<JobReminder>();
 			builder.Services.AddSingleton(new Job(type : typeof(JobReminder),expression:"0/5 0/1 * 1/1 * ? *")); //Every 30 sec
+			//builder.Services.AddSingleton<IJobListener, JobListener>();
 
 			var properties = new NameValueCollection();
 			//{
@@ -45,6 +46,8 @@ namespace WebConsoleApplication
 
 			var schedulerFactory = new StdSchedulerFactory(properties);
 			var scheduler = schedulerFactory.GetScheduler().Result;
+			scheduler.ListenerManager.AddJobListener(new JobListener(), GroupMatcher<JobKey>.AnyGroup());
+
 
 			scheduler.ListenerManager.AddTriggerListener(new TriggerListener(), GroupMatcher<TriggerKey>.AnyGroup());
 			scheduler.ListenerManager.AddSchedulerListener(new ScheduleListener());
