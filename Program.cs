@@ -22,7 +22,7 @@ namespace WebConsoleApplication
 			builder.Services.AddSingleton<IJobFactory, Service.SingletonJobFactory>();
 			//builder.Services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
 			builder.Services.AddSingleton<JobReminder>();
-			builder.Services.AddSingleton(new Job(type : typeof(JobReminder),expression:"0/5 0/1 * 1/1 * ? *")); //Every 30 sec
+			builder.Services.AddSingleton(new Job(type : typeof(JobReminder),expression:"0/30 0/1 * 1/1 * ? *")); //Every 30 sec
 			//builder.Services.AddSingleton<IJobListener, JobListener>();
 
 			var properties = new NameValueCollection();

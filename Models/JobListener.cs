@@ -4,7 +4,7 @@ namespace WebConsoleApplication.Models
 {
 	public class JobListener : IJobListener
 	{
-		public string Name => throw new NotImplementedException();
+		public string Name => "testing";
 
 		public Task JobExecutionVetoed(IJobExecutionContext context, CancellationToken cancellationToken = default)
 		{
